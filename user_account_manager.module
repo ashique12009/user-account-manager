@@ -1,0 +1,48 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+
+/**
+ * @file
+ * this module tries to alter the user_register_form including a new file field
+ * and the field will load its input in the db, in the 'users' table, and fot this
+ *
+ */
+
+/**
+ * Implements hook_form_alter()
+ */
+function user_account_manager_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+
+  switch ($form_id) {
+  case 'user_register_form':
+    $form['account']['field_father_name'][] = array(
+      '#title'       => t('Father Name'),
+      '#type'        => 'textfield',
+      '#description' => t('Your father name'),
+      '#size'        => 32,
+      '#required'    => TRUE,
+    );
+    $form['#validate'][] = '_user_account_manager_form_submit';
+  case 'user_profile_form':
+    $account = $form['#user'];
+    $register = ($form['#user']->uid > 0 ? FALSE : TRUE);
+    $form['account']['field_father_name'] = array(
+      '#title'         => t('Father Name'),
+      '#type'          => 'textfield',
+      '#description'   => t('Your father name'),
+      '#size'          => 32,
+      '#required'      => TRUE,
+      '#default_value' => (!$register ? $account->name : ''),
+    );
+  }
+  
+  return $form;
+}
+
+function _user_account_manager_form_submit(&$form, FormStateInterface $form_state) {  
+  if ($form_state->hasValue('field_father_name') && $form_state->getValue('field_father_name') != "") {
+    $father_name = $form_state->getValue('field_father_name');
+    \Drupal::service('messenger')->addMessage("form submit");
+  }
+}

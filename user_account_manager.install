@@ -1,0 +1,14 @@
+<?php 
+/**
+ * @file
+ * this module tries to run some functions during install
+ *
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function user_account_manager_install() {
+  $webinarStartOnDateField = ['key' => 'value'];
+  \Drupal::logger('user_account_manager')->info('<pre><code>' . print_r($webinarStartOnDateField, TRUE) . '</code></pre>');
+}
