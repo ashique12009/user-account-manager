@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @file
  * this module tries to run some functions during install
@@ -8,7 +8,32 @@
 /**
  * Implementation of hook_install().
  */
-function user_account_manager_install() {
-  $webinarStartOnDateField = ['key' => 'value'];
-  \Drupal::logger('user_account_manager')->info('<pre><code>' . print_r($webinarStartOnDateField, TRUE) . '</code></pre>');
+function user_account_manager_schema() {
+  $schema['field_father_data'] = array(
+    'description' => 'The table for storing the user father name.',
+    'fields'      => array(
+      'id'           => array(
+        'description' => 'The primary identifier for father name.',
+        'type'        => 'serial',
+        'not null'    => TRUE,
+        'unsigned'    => TRUE,
+      ),
+      'user_id'       => array(
+        'description' => 'User id',
+        'type'        => 'int',
+        'length'      => 10,
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'father_name'   => array(
+        'description' => 'father name.',
+        'type'        => 'varchar',
+        'length'      => 32,
+        'not null'    => TRUE,
+        'default'     => '',
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
 }
